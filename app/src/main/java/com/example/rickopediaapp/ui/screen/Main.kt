@@ -4,13 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,9 +24,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.rickopediaapp.data.model.Character
 import com.example.rickopediaapp.data.model.previewCharacter
+import com.example.rickopediaapp.ui.CharacterCard
 import com.example.rickopediaapp.ui.theme.Test1Theme
 import kotlinx.coroutines.flow.flowOf
 import org.injinity.cointap.utils.DarkThemePreview
@@ -41,16 +40,15 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     MainContent(
         message = message,
         onMessageShown = viewModel::snackbarMessageShown,
-        characterList = characterList
+        characterList = characterList,
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MainContent(
     message: String?,
     onMessageShown: () -> Unit,
-    characterList: LazyPagingItems<Character>
+    characterList: LazyPagingItems<Character>,
 ) {
     when (characterList.loadState.refresh) {
         LoadState.Loading -> {
@@ -68,53 +66,24 @@ fun MainContent(
         }
 
         else -> {
-            LazyColumn(
+            LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                columns = GridCells.Fixed(2)
             ) {
                 items(
                     count = characterList.itemCount,
                     key = characterList.itemKey(),
-                    contentType = characterList.itemContentType(
-                    )
+                    contentType = characterList.itemContentType()
                 ) { index ->
                     val item = characterList[index]
                     item?.let {
-                        Text(text = item.name)
+                        CharacterCard(character = item)
                     }
                 }
             }
         }
     }
-    /*LazyColumn(
-        state = state,
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        itemsIndexed(listCharacter) { index, item ->
-            (
-                    ListItem(
-                        leadingContent = {
-                            GlideImage(
-                                model = item.image,
-                                contentDescription = "character_image"
-                            )
-                        },
-                        headlineText = { Text(text = item.name) },
-                        supportingText = { Text(text = item.status) }
-                    )
-                    )
-        }
-    }
-    GlideLazyListPreloader(
-        state = state,
-        data = characterList,
-        size = Size(THUMBNAIL_SIZE, THUMBNAIL_SIZE),
-        numberOfItemsToPreload = 1,
-        requestBuilderTransform = { item, requestBuilder -> requestBuilder.load(item.image) }
-    )*/
 
     val snackbarHostState = remember { SnackbarHostState() }
     SnackbarHost(hostState = snackbarHostState, modifier = Modifier.fillMaxHeight())

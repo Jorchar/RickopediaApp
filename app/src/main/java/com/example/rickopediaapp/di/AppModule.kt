@@ -17,9 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-    @Singleton
-    @Provides
-    fun providesHello(): String = "Hello"
 
     @Singleton
     @Provides
