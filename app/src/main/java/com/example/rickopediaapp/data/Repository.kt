@@ -6,6 +6,7 @@ import com.example.rickopediaapp.data.model.Character
 import com.example.rickopediaapp.data.remote.CharactersPagingSource
 import com.example.rickopediaapp.data.remote.RemoteDataSource
 import com.example.rickopediaapp.util.PAGE_SIZE
+import com.example.rickopediaapp.util.PREFETCH_DISTANCE
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -16,8 +17,11 @@ class Repository @Inject constructor(
     }
 
     fun charactersPager() = Pager(
-        config = PagingConfig(pageSize = PAGE_SIZE)
-    ){
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            prefetchDistance = PREFETCH_DISTANCE
+        )
+    ) {
         CharactersPagingSource(remoteDataSource)
     }.flow
 
