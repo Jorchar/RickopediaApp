@@ -37,4 +37,8 @@ class MainViewModel @Inject constructor(
     fun snackbarMessageShown() {
         _message.value = null
     }
+
+    fun onCharacterClick() {
+        showSnackbar("Feature not available yet.")
+    }
 }

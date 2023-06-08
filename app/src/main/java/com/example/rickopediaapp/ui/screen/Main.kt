@@ -26,7 +26,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.rickopediaapp.data.model.Character
 import com.example.rickopediaapp.data.model.previewCharacter
-import com.example.rickopediaapp.ui.CharacterCard
+import com.example.rickopediaapp.ui.components.CharacterCard
 import com.example.rickopediaapp.ui.theme.Test1Theme
 import kotlinx.coroutines.flow.flowOf
 import org.injinity.cointap.utils.DarkThemePreview
@@ -41,6 +41,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         message = message,
         onMessageShown = viewModel::snackbarMessageShown,
         characterList = characterList,
+        onCharacterClick = viewModel::onCharacterClick,
     )
 }
 
@@ -49,6 +50,7 @@ fun MainContent(
     message: String?,
     onMessageShown: () -> Unit,
     characterList: LazyPagingItems<Character>,
+    onCharacterClick: () -> Unit
 ) {
     when (characterList.loadState.refresh) {
         LoadState.Loading -> {
@@ -78,7 +80,10 @@ fun MainContent(
                 ) { index ->
                     val item = characterList[index]
                     item?.let {
-                        CharacterCard(character = item)
+                        CharacterCard(
+                            character = item,
+                            onCharacterClick = onCharacterClick
+                        )
                     }
                 }
             }
@@ -105,7 +110,8 @@ fun MainPreview() {
             MainContent(
                 message = null,
                 onMessageShown = { },
-                characterList = flowOf(PagingData.from(listOf(previewCharacter))).collectAsLazyPagingItems()
+                characterList = flowOf(PagingData.from(listOf(previewCharacter))).collectAsLazyPagingItems(),
+                onCharacterClick = {}
             )
         }
     }

@@ -17,11 +17,12 @@ class CharactersPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> =
         try {
             val nextPageNumber = params.key ?: 1
-            val response = remoteDataSource.getCharacterPage(nextPageNumber)
+            val data = remoteDataSource.getCharacterPage(nextPageNumber).results
+
             LoadResult.Page(
-                data = response.results,
+                data = data,
                 prevKey = null,
-                nextKey = if (response.results.isNotEmpty()) nextPageNumber.plus(1) else null
+                nextKey = if (data.isNotEmpty()) nextPageNumber.plus(1) else null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
