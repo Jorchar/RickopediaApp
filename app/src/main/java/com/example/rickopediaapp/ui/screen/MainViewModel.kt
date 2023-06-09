@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.example.rickopediaapp.data.Repository
+import com.example.rickopediaapp.data.Result
+import com.example.rickopediaapp.data.model.Character
+import com.example.rickopediaapp.data.model.previewCharacter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,15 +33,27 @@ class MainViewModel @Inject constructor(
         initialValue = PagingData.empty()
     )
 
+    private val _character: MutableStateFlow<Character?> = MutableStateFlow(previewCharacter)
+    val character = _character.asStateFlow()
+
+    suspend fun getCharacterById(characterId: Int){
+        when(val result = repository.getCharacterById(characterId)){
+            is Result.Success -> {
+                _character.value = result.data
+            }
+            is Result.Error -> {
+                showSnackbar(result.exception?.message)
+            }
+            is Result.Loading -> {
+
+            }
+        }
+    }
     private fun showSnackbar(message: String?) {
         _message.value = message
     }
 
     fun snackbarMessageShown() {
         _message.value = null
-    }
-
-    fun onCharacterClick() {
-        showSnackbar("Feature not available yet.")
     }
 }

@@ -16,8 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -33,7 +34,7 @@ import org.injinity.cointap.utils.DarkThemePreview
 import org.injinity.cointap.utils.DevicePreviews
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun MainScreen(viewModel: MainViewModel, navController: NavController) {
     val message by viewModel.message.collectAsStateWithLifecycle()
     val characterList = viewModel.characters.collectAsLazyPagingItems()
 
@@ -41,7 +42,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         message = message,
         onMessageShown = viewModel::snackbarMessageShown,
         characterList = characterList,
-        onCharacterClick = viewModel::onCharacterClick,
+        navController = navController
     )
 }
 
@@ -50,7 +51,7 @@ fun MainContent(
     message: String?,
     onMessageShown: () -> Unit,
     characterList: LazyPagingItems<Character>,
-    onCharacterClick: () -> Unit
+    navController: NavController
 ) {
     when (characterList.loadState.refresh) {
         LoadState.Loading -> {
@@ -82,7 +83,7 @@ fun MainContent(
                     item?.let {
                         CharacterCard(
                             character = item,
-                            onCharacterClick = onCharacterClick
+                            navController = navController
                         )
                     }
                 }
@@ -111,7 +112,7 @@ fun MainPreview() {
                 message = null,
                 onMessageShown = { },
                 characterList = flowOf(PagingData.from(listOf(previewCharacter))).collectAsLazyPagingItems(),
-                onCharacterClick = {}
+                navController = rememberNavController()
             )
         }
     }
