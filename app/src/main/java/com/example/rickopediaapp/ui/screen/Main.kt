@@ -71,7 +71,6 @@ fun MainContent(
         else -> {
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
                 columns = GridCells.Fixed(2)
             ) {
                 items(

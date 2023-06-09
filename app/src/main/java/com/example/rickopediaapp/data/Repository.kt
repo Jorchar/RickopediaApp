@@ -3,7 +3,10 @@ package com.example.rickopediaapp.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.rickopediaapp.data.model.Character
+import com.example.rickopediaapp.data.model.CharacterMapper
+import com.example.rickopediaapp.data.model.Episode
 import com.example.rickopediaapp.data.remote.CharactersPagingSource
+import com.example.rickopediaapp.data.remote.GetCharacterResponse
 import com.example.rickopediaapp.data.remote.RemoteDataSource
 import com.example.rickopediaapp.util.PAGE_SIZE
 import com.example.rickopediaapp.util.PREFETCH_DISTANCE
@@ -26,10 +29,28 @@ class Repository @Inject constructor(
     }.flow
 
     suspend fun getCharacterById(id: Int): Result<Character> {
+        val result = remoteDataSource.getCharacterById(id)
         return try {
-            Result.Success(remoteDataSource.getCharacterById(id))
+            val characterEpisodes = getCharacterEpisodes(result)
+            Result.Success(CharacterMapper
+                .buildFrom(
+                    response = result,
+                    episodes = characterEpisodes
+                )
+            )
         } catch (e: Exception) {
             Result.Error(e)
+        }
+    }
+
+    private suspend fun getCharacterEpisodes(characterResult: GetCharacterResponse): List<Episode> {
+        val range = characterResult.episode.map {
+            it.substring(it.lastIndexOf("/")+1)
+        }.toString()
+        return try {
+            remoteDataSource.getEpisodeList(range)
+        }catch (e: Exception){
+            emptyList()
         }
     }
 }

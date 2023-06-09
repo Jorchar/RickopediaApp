@@ -1,8 +1,7 @@
 package com.example.rickopediaapp.data.model
 
 data class Character(
-    val created: String,
-    val episode: List<String>,
+    val episodesList: List<Episode>,
     val gender: String,
     val id: Int,
     val image: String,
@@ -12,7 +11,6 @@ data class Character(
     val species: String,
     val status: String,
     val type: String,
-    val url: String
 ) {
     data class Location(
         val name: String,
@@ -26,8 +24,7 @@ data class Character(
 }
 
 val previewCharacter = Character(
-    created = "2022-03-15",
-    episode = listOf("S01E01", "S01E02", "S01E03"),
+    episodesList = listOf(),
     gender = "Male",
     id = 1,
     image = "https://example.com/character1.jpg",
@@ -43,5 +40,4 @@ val previewCharacter = Character(
     species = "Human",
     status = "Alive",
     type = "Main character",
-    url = "https://example.com/characters/johndoe"
 )

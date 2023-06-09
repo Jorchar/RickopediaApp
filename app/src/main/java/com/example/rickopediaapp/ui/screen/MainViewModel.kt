@@ -3,6 +3,7 @@ package com.example.rickopediaapp.ui.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.rickopediaapp.data.Repository
 import com.example.rickopediaapp.data.Result
 import com.example.rickopediaapp.data.model.Character
@@ -31,7 +32,7 @@ class MainViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
-    )
+    ).cachedIn(this.viewModelScope)
 
     private val _character: MutableStateFlow<Character?> = MutableStateFlow(previewCharacter)
     val character = _character.asStateFlow()
@@ -45,7 +46,6 @@ class MainViewModel @Inject constructor(
                 showSnackbar(result.exception?.message)
             }
             is Result.Loading -> {
-
             }
         }
     }
