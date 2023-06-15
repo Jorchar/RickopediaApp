@@ -26,6 +26,8 @@ class RemoteDataSource @Inject constructor(
         return response.body() ?: throw RuntimeException(error.msg)
     }
 
+
+
     suspend fun getEpisodeById(id: Int): Episode {
         val response = api.getEpisodeById(id)
         val error = gson.fromJson(response.errorBody().toString(), Error::class.java)

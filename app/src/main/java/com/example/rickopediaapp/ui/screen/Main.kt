@@ -16,9 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -34,7 +33,7 @@ import org.injinity.cointap.utils.DarkThemePreview
 import org.injinity.cointap.utils.DevicePreviews
 
 @Composable
-fun MainScreen(viewModel: MainViewModel, navController: NavController) {
+fun MainScreen(viewModel: MainViewModel = hiltViewModel(), onNavigateToCharacter: (String) -> Unit) {
     val message by viewModel.message.collectAsStateWithLifecycle()
     val characterList = viewModel.characters.collectAsLazyPagingItems()
 
@@ -42,7 +41,7 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
         message = message,
         onMessageShown = viewModel::snackbarMessageShown,
         characterList = characterList,
-        navController = navController
+        onNavigateToCharacter = onNavigateToCharacter
     )
 }
 
@@ -51,7 +50,7 @@ fun MainContent(
     message: String?,
     onMessageShown: () -> Unit,
     characterList: LazyPagingItems<Character>,
-    navController: NavController
+    onNavigateToCharacter: (String) -> Unit
 ) {
     when (characterList.loadState.refresh) {
         LoadState.Loading -> {
@@ -82,7 +81,7 @@ fun MainContent(
                     item?.let {
                         CharacterCard(
                             character = item,
-                            navController = navController
+                            onNavigateToCharacter = onNavigateToCharacter
                         )
                     }
                 }
@@ -111,7 +110,7 @@ fun MainPreview() {
                 message = null,
                 onMessageShown = { },
                 characterList = flowOf(PagingData.from(listOf(previewCharacter))).collectAsLazyPagingItems(),
-                navController = rememberNavController()
+                onNavigateToCharacter = fun(_) {}
             )
         }
     }

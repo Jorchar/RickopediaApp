@@ -1,10 +1,8 @@
 package com.example.rickopediaapp.data.remote
 
-import com.example.rickopediaapp.data.model.Character
-
 data class GetCharactersPageResponse(
     val info: Info = Info(),
-    val results: List<Character>
+    val results: List<GetCharacterResponse>
 ) {
 
     data class Info(

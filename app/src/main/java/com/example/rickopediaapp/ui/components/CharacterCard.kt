@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.rickopediaapp.R
@@ -33,7 +31,7 @@ import org.injinity.cointap.utils.DevicePreviews
 @Composable
 fun CharacterCard(
     character: Character,
-    navController: NavController
+    onNavigateToCharacter: (String) -> Unit
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -41,7 +39,7 @@ fun CharacterCard(
             .fillMaxWidth()
             .aspectRatio(.75f),
         onClick = {
-            navController.navigate("details/"+character.id)
+            onNavigateToCharacter("details/"+character.id)
         }
     ) {
         Box {
@@ -96,7 +94,7 @@ fun MainPreview() {
         Surface {
             CharacterCard(
                 character = previewCharacter,
-                navController = rememberNavController()
+                onNavigateToCharacter = fun (_){ }
             )
         }
     }

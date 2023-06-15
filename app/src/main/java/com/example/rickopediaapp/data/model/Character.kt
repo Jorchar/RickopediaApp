@@ -1,16 +1,22 @@
 package com.example.rickopediaapp.data.model
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "characters")
 data class Character(
-    val episodesList: List<Episode>,
-    val gender: String,
-    val id: Int,
-    val image: String,
-    val location: Location,
-    val name: String,
-    val origin: Origin,
-    val species: String,
-    val status: String,
-    val type: String,
+    @PrimaryKey var id: Int = 0,
+    @Embedded(prefix = "location_") var location: Location = Location("", ""),
+    @Embedded(prefix = "origin_") var origin: Origin = Origin("", ""),
+    @Ignore var episodesList: List<Episode> = emptyList(),
+    var gender: String = "",
+    var image: String = "",
+    var name: String = "",
+    var species: String = "",
+    var status: String = "",
+    var type: String = "",
 ) {
     data class Location(
         val name: String,
