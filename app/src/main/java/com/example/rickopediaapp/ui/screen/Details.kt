@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,7 +79,7 @@ fun DetailsContent(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = character!!.name,
+                        text = character.name,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.displaySmall,
                         modifier = Modifier.weight(1f)
@@ -152,8 +150,8 @@ fun DetailsContent(
                     state = state,
                     flingBehavior = rememberSnapFlingBehavior(lazyListState = state)
                 ) {
-                    items(
-                        count = character.episodesList.size
+                    /*items(
+                        count = character.episodesList?.size ?: 0
                     ) { index ->
                         val item = character.episodesList[index]
                         OutlinedCard(
@@ -176,7 +174,7 @@ fun DetailsContent(
                                 )
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }

@@ -29,22 +29,9 @@ class Repository @Inject constructor(
             pageSize = PAGE_SIZE,
             prefetchDistance = PREFETCH_DISTANCE
         ),
-        remoteMediator = CharacterMediator(appDatabase, this),
+        remoteMediator = CharacterMediator(appDatabase, remoteDataSource),
         pagingSourceFactory = { characterDao.getCharacters()}
     ).flow
-
-
-    suspend fun getCharacterPage(page: Int): List<Character> {
-        val response = remoteDataSource.getCharacterPage(page).results
-        return response.map { responseCharacter ->
-            val character: Character =
-                CharacterMapper.buildFrom(
-                    response = responseCharacter,
-                    episodes = emptyList()
-                )
-            character
-        }
-    }
 
     suspend fun getCharacterById(id: Int): Result<Character> {
         val result = remoteDataSource.getCharacterById(id)

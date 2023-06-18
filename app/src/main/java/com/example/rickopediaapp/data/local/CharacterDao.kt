@@ -16,5 +16,5 @@ interface CharacterDao {
     fun getCharacters(): PagingSource<Int, Character>
 
     @Query("DELETE FROM characters")
-    fun clearAll()
+    fun deleteAllCharacters()
 }

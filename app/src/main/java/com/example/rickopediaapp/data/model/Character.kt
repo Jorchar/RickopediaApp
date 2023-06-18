@@ -10,7 +10,7 @@ data class Character(
     @PrimaryKey var id: Int = 0,
     @Embedded(prefix = "location_") var location: Location = Location("", ""),
     @Embedded(prefix = "origin_") var origin: Origin = Origin("", ""),
-    @Ignore var episodesList: List<Episode> = emptyList(),
+    @Ignore var episodesList: List<Episode>? = null,
     var gender: String = "",
     var image: String = "",
     var name: String = "",

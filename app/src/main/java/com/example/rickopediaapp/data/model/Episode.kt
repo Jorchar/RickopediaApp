@@ -1,11 +1,16 @@
 package com.example.rickopediaapp.data.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "episodes")
 data class Episode(
-    val air_date: String,
-    val characters: List<String>,
-    val created: String,
-    val episode: String,
-    val id: Int,
-    val name: String,
-    val url: String
+    @PrimaryKey var id: Int = 0,
+    @Ignore var characters: List<String> = emptyList(),
+    var air_date: String = "",
+    var created: String = "",
+    var episode: String = "",
+    var name: String = "",
+    var url: String = ""
 )
