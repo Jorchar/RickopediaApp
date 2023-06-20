@@ -14,3 +14,13 @@ data class Episode(
     var name: String = "",
     var url: String = ""
 )
+
+val previewEpisode = Episode(
+    id = 1,
+    characters = listOf("Character 1", "Character 2", "Character 3"),
+    air_date = "2023-06-20",
+    created = "2023-06-19T12:00:00Z",
+    episode = "Episode 1",
+    name = "Episode Name",
+    url = "https://example.com/episode1"
+)

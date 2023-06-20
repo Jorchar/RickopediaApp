@@ -12,8 +12,11 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertEpisodes(episodes: List<Episode>)
 
-    @Query("SELECT * FROM episodes")
-    fun getEpisodes(): PagingSource<Int, Episode>
+    @Query("SELECT * FROM episodes WHERE id IN (:query)")
+    fun getEpisodes(query: List<Int>): PagingSource<Int, Episode>
+
+    @Query("DELETE FROM episodes WHERE id IN (:query)")
+    fun deleteEpisodes(query: List<Int>)
 
     @Query("DELETE FROM episodes")
     fun clearAll()

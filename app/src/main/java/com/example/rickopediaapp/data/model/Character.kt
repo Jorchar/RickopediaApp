@@ -2,7 +2,6 @@ package com.example.rickopediaapp.data.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "characters")
@@ -10,7 +9,7 @@ data class Character(
     @PrimaryKey var id: Int = 0,
     @Embedded(prefix = "location_") var location: Location = Location("", ""),
     @Embedded(prefix = "origin_") var origin: Origin = Origin("", ""),
-    @Ignore var episodesList: List<Episode>? = null,
+    var episodesList: String = "",
     var gender: String = "",
     var image: String = "",
     var name: String = "",
@@ -30,10 +29,10 @@ data class Character(
 }
 
 val previewCharacter = Character(
-    episodesList = listOf(),
+    episodesList = "1",
     gender = "Male",
     id = 1,
-    image = "https://example.com/character1.jpg",
+    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
     location = Character.Location(
         name = "Earth",
         url = "https://example.com/locations/earth"

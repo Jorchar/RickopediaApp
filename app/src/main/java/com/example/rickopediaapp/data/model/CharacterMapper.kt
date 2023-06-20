@@ -6,10 +6,11 @@ object CharacterMapper {
 
     fun buildFrom(
         response: GetCharacterResponse,
-        episodes: List<Episode>
     ): Character {
         return Character(
-            episodesList = episodes,
+            episodesList = response.episode.map {
+                it.substring(it.lastIndexOf("/") + 1)
+            }.toString(),
             gender = response.gender,
             id = response.id,
             image = response.image,

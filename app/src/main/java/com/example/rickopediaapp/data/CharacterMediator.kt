@@ -66,7 +66,7 @@ class CharacterMediator(
                 }
                 characterKeyDao.insertOrReplace(characterKeys = keys)
                 characterDao.insertCharacters(characters = response.results.map {
-                    CharacterMapper.buildFrom(it, emptyList())
+                    CharacterMapper.buildFrom(it)
                 })
             }
 

@@ -5,12 +5,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.rickopediaapp.data.local.AppDatabase
 import com.example.rickopediaapp.data.model.Character
-import com.example.rickopediaapp.data.model.CharacterMapper
-import com.example.rickopediaapp.data.model.Episode
-import com.example.rickopediaapp.data.remote.GetCharacterResponse
 import com.example.rickopediaapp.data.remote.RemoteDataSource
-import com.example.rickopediaapp.util.PAGE_SIZE
-import com.example.rickopediaapp.util.PREFETCH_DISTANCE
+import com.example.rickopediaapp.util.CHARACTER_PAGE_SIZE
+import com.example.rickopediaapp.util.CHARACTER_PREFETCH_DISTANCE
+import com.example.rickopediaapp.util.EPISODE_PAGE_SIZE
+import com.example.rickopediaapp.util.EPISODE_PREFETCH_DISTANCE
+import com.google.gson.Gson
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -22,41 +22,38 @@ class Repository @Inject constructor(
     }
 
     private val characterDao = appDatabase.characterDao()
+    private val episodeDao = appDatabase.episodeDao()
+    private val gson = Gson()
 
     @OptIn(ExperimentalPagingApi::class)
     fun charactersPager() = Pager(
         config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            prefetchDistance = PREFETCH_DISTANCE
+            pageSize = CHARACTER_PAGE_SIZE,
+            prefetchDistance = CHARACTER_PREFETCH_DISTANCE
         ),
         remoteMediator = CharacterMediator(appDatabase, remoteDataSource),
-        pagingSourceFactory = { characterDao.getCharacters()}
+        pagingSourceFactory = { characterDao.getCharacters() }
     ).flow
 
-    suspend fun getCharacterById(id: Int): Result<Character> {
-        val result = remoteDataSource.getCharacterById(id)
-        return try {
-            val characterEpisodes = getCharacterEpisodes(result)
-            Result.Success(
-                CharacterMapper
-                    .buildFrom(
-                        response = result,
-                        episodes = characterEpisodes
-                    )
-            )
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    fun getCharacterById(characterId: Int): Character {
+        return characterDao.getCharacterById(characterId)
     }
 
-    private suspend fun getCharacterEpisodes(characterResult: GetCharacterResponse): List<Episode> {
-        val range = characterResult.episode.map {
-            it.substring(it.lastIndexOf("/") + 1)
-        }.toString()
-        return try {
-            remoteDataSource.getEpisodeList(range)
-        } catch (e: Exception) {
-            emptyList()
+    @OptIn(ExperimentalPagingApi::class)
+    fun episodePager(query: String) = Pager(
+        config = PagingConfig(
+            pageSize = EPISODE_PAGE_SIZE,
+            prefetchDistance = EPISODE_PREFETCH_DISTANCE
+        ),
+        remoteMediator = EpisodeMediator(
+            gson.fromJson(query, Array<Int>::class.java).toList(),
+            appDatabase,
+            remoteDataSource
+        ),
+        pagingSourceFactory = {
+            episodeDao.getEpisodes(
+                gson.fromJson(query, Array<Int>::class.java).toList()
+            )
         }
-    }
+    ).flow
 }

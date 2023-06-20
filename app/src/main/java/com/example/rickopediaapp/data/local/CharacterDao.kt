@@ -12,6 +12,9 @@ interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCharacters(characters: List<Character>)
 
+    @Query("SELECT * FROM characters WHERE id LIKE :characterId")
+    fun getCharacterById(characterId: Int): Character
+
     @Query("SELECT * FROM characters")
     fun getCharacters(): PagingSource<Int, Character>
 

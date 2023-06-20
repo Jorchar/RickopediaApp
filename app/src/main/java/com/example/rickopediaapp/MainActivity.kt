@@ -3,8 +3,10 @@ package com.example.rickopediaapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavType
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
@@ -15,6 +17,13 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+
+@VisibleForTesting
+internal const val characterIdArg = "characterId"
+internal class CharacterArgs(val characterId: Int){
+    constructor(savedStateHandle: SavedStateHandle):
+            this(checkNotNull(savedStateHandle.get<Int>(characterIdArg)))
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +56,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            route = "details/{character}",
+                            route = "details/{$characterIdArg}",
                             enterTransition = {
                                 slideIntoContainer(
                                     AnimatedContentTransitionScope.SlideDirection.Left
@@ -59,14 +68,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                             arguments = listOf(
-                                navArgument("character") {
+                                navArgument(characterIdArg) {
                                     type = NavType.IntType
                                     defaultValue = 1
                                     nullable = false
                                 }
                             )
-                        ) { entry ->
-                            DetailsScreen(characterId = entry.arguments?.getInt("character")!!)
+                        ) {
+                            DetailsScreen()
                         }
                     }
                 }

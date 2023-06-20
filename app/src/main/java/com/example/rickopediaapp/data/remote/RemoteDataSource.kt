@@ -14,22 +14,8 @@ class RemoteDataSource @Inject constructor(
         private const val TAG = "RemoteDataSource"
     }
 
-    suspend fun getCharacterById(id: Int): GetCharacterResponse {
-        val response = api.getCharacterById(id)
-        val error = gson.fromJson(response.errorBody().toString(), Error::class.java)
-        return response.body() ?: throw RuntimeException(error.msg)
-    }
-
     suspend fun getCharacterPage(pageIndex: Int): GetCharactersPageResponse {
         val response = api.getCharacterList(pageIndex)
-        val error = gson.fromJson(response.errorBody().toString(), Error::class.java)
-        return response.body() ?: throw RuntimeException(error.msg)
-    }
-
-
-
-    suspend fun getEpisodeById(id: Int): Episode {
-        val response = api.getEpisodeById(id)
         val error = gson.fromJson(response.errorBody().toString(), Error::class.java)
         return response.body() ?: throw RuntimeException(error.msg)
     }
