@@ -91,7 +91,7 @@ class CharacterMediator(
     private suspend fun getCharacterKeyForFirstItem(
         state: PagingState<Int, Character>
     ): CharacterKey? {
-        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull()
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { character ->
                 characterKeyDao.characterKeyById(character.id)
             }

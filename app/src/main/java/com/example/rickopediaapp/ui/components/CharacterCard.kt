@@ -23,7 +23,6 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.rickopediaapp.R
 import com.example.rickopediaapp.data.model.Character
 import com.example.rickopediaapp.data.model.previewCharacter
-import com.example.rickopediaapp.ui.theme.Test1Theme
 import org.injinity.cointap.utils.DarkThemePreview
 import org.injinity.cointap.utils.DevicePreviews
 
@@ -39,7 +38,7 @@ fun CharacterCard(
             .fillMaxWidth()
             .aspectRatio(.75f),
         onClick = {
-            onNavigateToCharacter("details/"+character.id)
+            onNavigateToCharacter(character.id.toString())
         }
     ) {
         Box {
@@ -90,12 +89,10 @@ fun CharacterCard(
 @DevicePreviews
 @DarkThemePreview
 fun MainPreview() {
-    Test1Theme {
-        Surface {
-            CharacterCard(
-                character = previewCharacter,
-                onNavigateToCharacter = fun (_){ }
-            )
-        }
+    Surface {
+        CharacterCard(
+            character = previewCharacter,
+            onNavigateToCharacter = fun(_) {}
+        )
     }
 }

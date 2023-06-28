@@ -37,7 +37,7 @@ class EpisodeMediator(
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
                         ?: return MediatorResult.Success(endOfPaginationReached = true)
-                    val startIndex = lastItem.id
+                    val startIndex = findIndex(lastItem.id) + 1
                     val endIndex = startIndex + EPISODE_PAGE_SIZE
                     val idsToLoad = query.subList(startIndex, endIndex.coerceAtMost(query.size))
                     gson.toJson(idsToLoad)
@@ -59,5 +59,14 @@ class EpisodeMediator(
         } catch (e: Exception) {
             return MediatorResult.Error(e)
         }
+    }
+
+    private fun findIndex(target: Int): Int {
+        for(i in query.indices){
+            if(query[i] == target){
+                return  i
+            }
+        }
+        return -1
     }
 }

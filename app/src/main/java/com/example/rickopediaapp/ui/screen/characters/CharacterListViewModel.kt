@@ -1,4 +1,4 @@
-package com.example.rickopediaapp.ui.screen
+package com.example.rickopediaapp.ui.screen.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: Repository
+class CharacterListViewModel @Inject constructor(
+    repository: Repository
 ) : ViewModel() {
 
     companion object {
-        private const val TAG = "MainViewModel"
+        private const val TAG = "CharacterListViewModel"
     }
 
     private val _message: MutableStateFlow<String?> = MutableStateFlow(null)
