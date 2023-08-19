@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.codelab.android.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  bool dark_mode = 1;
+  int32 theme = 2;
+}
