@@ -1,6 +1,12 @@
 package com.example.rickopediaapp.di
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.dataStoreFile
 import androidx.room.Room
+import com.codelab.android.datastore.UserPreferences
+import com.example.rickopediaapp.data.UserPreferencesSerializer
 import com.example.rickopediaapp.data.local.AppDatabase
 import com.example.rickopediaapp.data.remote.RickAndMortyAPI
 import com.example.rickopediaapp.util.URL_SERVER
@@ -61,4 +67,16 @@ class AppModule{
             klass = AppDatabase::class.java,
             name = "rick-database"
         ).allowMainThreadQueries().build()
+
+    @Singleton
+    @Provides
+    fun provideProtoDataStore(@ApplicationContext appContext: Context): DataStore<UserPreferences> {
+        return DataStoreFactory.create(
+            serializer = UserPreferencesSerializer,
+            produceFile = { appContext.dataStoreFile("user_prefs.pb") },
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { UserPreferences.getDefaultInstance() }
+            )
+        )
+    }
 }

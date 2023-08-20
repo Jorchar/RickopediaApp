@@ -5,5 +5,13 @@ option java_multiple_files = true;
 
 message UserPreferences {
   bool dark_mode = 1;
-  int32 theme = 2;
+  Theme theme = 2;
+
+  enum Theme {
+    UNSPECIFIED = 0;
+    BASIC = 1;
+    SYSTEM = 2;
+    ANDROID = 3;
+    BLACK_AND_WHITE = 4;
+  }
 }
