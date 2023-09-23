@@ -24,5 +24,8 @@ fun AppNavHost(
             onEpisodeClick = {},
             nestedGraph = {}
         )
+        settingsGraph (
+            nestedGraph = {}
+        )
     }
 }

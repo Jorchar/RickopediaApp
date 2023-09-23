@@ -14,6 +14,7 @@ import com.example.rickopediaapp.navigation.characterListNavigationRoute
 import com.example.rickopediaapp.navigation.episodeListNavigationRoute
 import com.example.rickopediaapp.navigation.navigateToCharacterList
 import com.example.rickopediaapp.navigation.navigateToEpisodeList
+import com.example.rickopediaapp.navigation.navigateToSettings
 
 @Composable
 fun rememberAppState(
@@ -58,6 +59,10 @@ class AppState(
             )
 
             TopLevelDestination.EPISODE_LIST -> navController.navigateToEpisodeList(
+                topLevelNavOptions
+            )
+
+            TopLevelDestination.SETTINGS -> navController.navigateToSettings(
                 topLevelNavOptions
             )
         }
